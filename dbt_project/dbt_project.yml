@@ -1,0 +1,23 @@
+
+name: 'dbt_sqlmesh_multi_project'
+version: '1.0.0'
+
+profile: 'dbt_sqlmesh_multi_project'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+
+models:
+  +start: Jan 1 2017
+  dbt_sqlmesh_multi_project:
+    example:
+      +materialized: view

@@ -1,0 +1,11 @@
+
+version: 2
+
+models:
+  - name: views_per_domain
+    description: "Views per domain"
+    columns:
+      - name: domain
+        description: "The primary key for this table"
+      - name: views_count
+        description: "The number of views"

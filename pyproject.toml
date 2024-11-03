@@ -1,0 +1,11 @@
+[project]
+name = "dbt-sqlmesh-multi-project"
+version = "0.1.0"
+description = "dbt SQLMesh multi project"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "agate>=1.9.1",
+    "dbt-bigquery>=1.8.3",
+    "sqlmesh[bigquery,dbt,github,web]>=0.130.1",
+]

@@ -1,0 +1,15 @@
+dbt_sqlmesh_multi_project:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: "{{ env_var('METHOD', 'oauth') }}"
+      project: "{{ env_var('PROJECT', 'project-to-update') }}"
+      execution_project: "{{ env_var('EXECUTION_PROJECT', 'execution-project-to-update') }}"
+      dataset: "{{ env_var('DATASET', 'dbt_my_username') }}"
+      threads: "{{ env_var('THREADS', 8) | as_number }}"
+      keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS', 'gcp_credentials.json') }}"
+      timeout_seconds: "{{ env_var('TIMEOUT_SECONDS', 10800) | as_number }}"
+      priority: "{{ env_var('PRIORITY', 'interactive') }}"
+      location: "{{ env_var('LOCATION', 'US') }}"
+      retries: "{{ env_var('RETRIES', 1) | as_number }}"

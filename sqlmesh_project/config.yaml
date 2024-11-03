@@ -1,0 +1,15 @@
+gateways:
+  dev:
+    connection:
+      type: bigquery
+      project: teads-automated-tests
+      execution_project: teads-exploration
+      location: US
+      method: oauth
+      priority: interactive
+
+default_gateway: dev
+
+model_defaults:
+  dialect: bigquery
+  start: 2024-11-02

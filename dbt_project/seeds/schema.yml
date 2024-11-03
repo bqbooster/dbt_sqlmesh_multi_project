@@ -1,0 +1,22 @@
+
+version: 2
+
+seeds:
+  - name: views_data
+    description: "Views"
+    columns:
+      - name: ts
+        description: "The timestamp"
+        type: timestamp
+      - name: domain
+        description: "The domain"
+        type: string
+      - name: os
+        description: "The operating system"
+        type: string
+      - name: browser
+        description: "The browser"
+        type: string
+      - name: views_count
+        description: "The number of views"
+        type: integer
