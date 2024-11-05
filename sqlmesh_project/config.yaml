@@ -6,9 +6,12 @@ gateways:
       execution_project: {{ env_var('EXECUTION_PROJECT', 'execution-project-to-update') }}
       location: {{ env_var('LOCATION', 'US') }}
       method: {{ env_var('METHOD', 'oauth') }}
-      
       priority: {{ env_var('PRIORITY', 'interactive') }}
       keyfile: {{ env_var('GOOGLE_APPLICATION_CREDENTIALS', 'gcp_credentials.json') }}
+
+    state_connection:
+      type: duckdb
+      database: local_state.db
 
 default_gateway: dev
 
