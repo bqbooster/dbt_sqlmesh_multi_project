@@ -1,0 +1,23 @@
+test_daily_views_per_domain:
+  model: dbt_test.daily_views_per_domain
+  inputs:
+    dbt_test.views_data:
+      rows:
+      - ts: "2021-01-01 00:00:00"
+        domain: "teads.com"
+        views_count: 10
+      - ts: "2021-01-01 00:00:00"
+        domain: "teads.com"
+        views_count: 20
+      - ts: "2021-01-01 00:00:00"
+        domain: "teads.com"
+        views_count: 30
+  outputs:
+    query:
+      rows:
+      - ts: "2021-01-01 00:00:00"
+        domain: "teads.com"
+        views_count: 60
+  vars:
+    start: 2021-01-01
+    end: 2021-01-01

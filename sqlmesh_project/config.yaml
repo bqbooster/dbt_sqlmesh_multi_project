@@ -9,6 +9,10 @@ gateways:
       priority: {{ env_var('PRIORITY', 'interactive') }}
       keyfile: {{ env_var('GOOGLE_APPLICATION_CREDENTIALS', 'gcp_credentials.json') }}
 
+    test_connection:
+      type: duckdb
+      database: test.db
+
     state_connection:
       type: duckdb
       database: local_state.db
