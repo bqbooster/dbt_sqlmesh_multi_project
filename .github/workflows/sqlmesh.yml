@@ -5,6 +5,16 @@ on:
     types:
     - synchronize
     - opened
+# GitHub secrets
+env:
+  GITHUB_SHA_OVERRIDE: ${{ github.event.pull_request.head.sha }} # We need the commit hash of the pull request branch's head, the GITHUB_SHA env var is always the base branch in a pull_request_target trigger
+  DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}
+  METHOD: service-account
+  DATASET: dbt_test
+  PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT }}
+  EXECUTION_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT }}
+  LOCATION: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_LOCATION }}
+  GOOGLE_APPLICATION_CREDENTIALS: "${{ github.workspace }}/keyfile.json"
 # The latest commit is the one that will be used to create the PR environment and deploy to production
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
@@ -23,15 +33,29 @@ jobs:
       # Required to merge
       pull-requests: write
     steps:
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Checkout PR branch
         uses: actions/checkout@v4
         with:
           ref: refs/pull/${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number  }}/merge
+      - name: Write keyfile if secret is defined
+        run: |
+          if [ -z "${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}" ]; then
+            echo "Error: DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT is not defined."
+            exit 1
+          else
+            echo ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }} | base64 -d > keyfile.json  
+            echo "Keyfile written to keyfile.json"
+          fi
       - name: Install SQLMesh + Dependencies
         run: pip install -r requirements.txt
         shell: bash
+      - name: Check dbt debug
+        run: |
+          cd dbt_project && dbt debug
       - name: Run CI/CD Bot
         run: |
-          sqlmesh_cicd -p ${{ github.workspace }}/dbt_project -p ${{ github.workspace }}/sqlmesh_project github --token ${{ secrets.GITHUB_TOKEN }} run-all
+          cd ${{ github.workspace }} && sqlmesh_cicd -p ./dbt_project -p ./sqlmesh_project github --token ${{ secrets.GITHUB_TOKEN }} run-all
