@@ -1,0 +1,16 @@
+test_views_per_domain:
+  model: dbt_test.views_per_domain
+  inputs:
+    dbt_test.views_data:
+      rows:
+      - domain: "teads.com"
+        views_count: 10
+      - domain: "teads.com"
+        views_count: 20
+      - domain: "teads.com"
+        views_count: 30
+  outputs:
+    query:
+      rows:
+      - domain: "teads.com"
+        views_count: 60
